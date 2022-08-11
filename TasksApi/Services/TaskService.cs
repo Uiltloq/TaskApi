@@ -7,10 +7,11 @@ namespace TasksApi.Services
     public class TaskService : ITaskService
     {
         private readonly ApplicationDataContext _db;
-
-        public TaskService(ApplicationDataContext db)
+        private readonly Microsoft.AspNetCore.Hosting.IHostingEnvironment _hostingEnvironment;
+        public TaskService(ApplicationDataContext db, Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnvironment)
         {
             _db = db;
+            _hostingEnvironment = hostingEnvironment;
         }
         public async System.Threading.Tasks.Task Create(Models.Task task)
         {
@@ -78,6 +79,11 @@ namespace TasksApi.Services
         {
             try
             {
+                _hostingEnvironment.WebRootPath = Path.Combine(_hostingEnvironment.ContentRootPath,"upload");
+                if(!Directory.Exists(_hostingEnvironment.WebRootPath))
+                {
+                    Directory.CreateDirectory(_hostingEnvironment.WebRootPath);
+                }
                 using (var fstream = new FileInfo(path).Create())
                 {
                    file.CopyTo(fstream);
