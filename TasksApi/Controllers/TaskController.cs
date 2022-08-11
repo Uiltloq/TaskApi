@@ -11,8 +11,6 @@ namespace TasksApi.Controllers
     {
         private readonly ITaskService _taskSerivce;
 
-        /* API должен позволять работать с задачами (добавлять, удалять, обновлять, получать) и файлами. Учитывать, что файл может быть большим (в районе 100мб).*/
-
         public TaskController(ITaskService taskSerivce)
         {
             _taskSerivce = taskSerivce;
@@ -39,6 +37,18 @@ namespace TasksApi.Controllers
             }
             return Ok(task);
         }
+        /// <summary>
+        /// Метод для получения задач
+        /// </summary>
+        /// <param name="value">Количество записей</param>
+        /// <returns></returns>
+        [HttpGet("value")]
+        public async Task<ActionResult<List<Models.Task>>> GetLimitTask(int value)
+        {
+            var tasks = await _taskSerivce.GetTasksLimit(value);
+            return Ok(tasks);
+        }
+        
         [HttpPost]
         public async Task<ActionResult<Models.Task>> Create(CreateTaskDto request)
         {
@@ -51,6 +61,7 @@ namespace TasksApi.Controllers
             await _taskSerivce.Create(task);
             return Ok(task);
         }
+        
         [HttpPut("id")]
         public async Task<ActionResult<Models.Task>> Update(int id, UpdateTaskDto request)
         {
@@ -65,10 +76,26 @@ namespace TasksApi.Controllers
             await _taskSerivce.Update(dbTask);
             return await Get(id);
         }
+        
         [HttpDelete("id")]
         public async Task<ActionResult> Delete(int id)
         {
             await _taskSerivce.Delete(id);
+            return Ok();
+        }
+
+        [RequestFormLimits(ValueLengthLimit = int.MaxValue, MultipartBodyLengthLimit = int.MaxValue)]
+        [DisableRequestSizeLimit]
+        [Consumes("multipart/form-data")]
+        [HttpPost]
+        [Route("UploadFile")]
+        public async Task<ActionResult> UploadFile(IFormFile file, int id)
+        {
+            if (file == null)
+               throw new ArgumentNullException(nameof(file));
+            if (id == 0)
+                throw new ArgumentNullException(nameof(id));
+            await _taskSerivce.UploadFile(file, id);
             return Ok();
         }
     }

@@ -27,6 +27,11 @@ namespace TasksApi.Data
                 {
                     Id = 3,
                     Name = "Готово"
+                },
+                new Status
+                {
+                    Id = 4,
+                    Name = "Отмена"
                 }
 
             );
@@ -42,7 +47,35 @@ namespace TasksApi.Data
                         Id = 2,
                         Name = "Баг номер 2",
                         Date = DateTime.Now,
+                        StatusId = 2
+                    },
+                    new Task
+                    {
+                        Id = 3,
+                        Name = "Баг номер 3",
+                        Date = DateTime.Now,
+                        StatusId = 3
+                    },
+                    new Task
+                    {
+                        Id = 4,
+                        Name = "Баг номер 4",
+                        Date = DateTime.Now,
+                        StatusId = 4
+                    },
+                    new Task
+                    {
+                        Id = 5,
+                        Name = "Баг номер 5",
+                        Date = DateTime.Now,
                         StatusId = 1
+                    },
+                    new Task
+                    {
+                        Id = 6,
+                        Name = "Баг номер 6",
+                        Date = DateTime.Now,
+                        StatusId = 2
                     }
                 );
         }

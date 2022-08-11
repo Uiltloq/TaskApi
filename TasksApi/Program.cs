@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json.Serialization;
 using TasksApi.Data;
 using TasksApi.Services;
 
@@ -16,8 +15,7 @@ builder.Services.AddDbContext<ApplicationDataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddScoped<ITaskService, TaskService>();
-//builder.Services.AddControllers().AddJsonOptions(x =>
-//                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+builder.Services.AddScoped<IFileService, FileService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

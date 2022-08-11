@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TasksApi.Data;
+using TasksApi.Models;
 
 namespace TasksApi.Services
 {
@@ -31,7 +32,6 @@ namespace TasksApi.Services
 
         public async Task<Models.Task> GetTask(int id)
         {
-            //var task = await _db.Tasks.Include(t => t.Status).FirstOrDefaultAsync(t => t.Id == id);
             var task = await _db.Tasks.Include(t => t.Status).FirstOrDefaultAsync(t=>t.Id == id);
             if (task == null)
                 throw new Exception("Нет такой задачи");
@@ -42,6 +42,15 @@ namespace TasksApi.Services
         {
             var tasks = await _db.Tasks
                 .Include(t=>t.Status)
+                .Include(t=>t.UploadResults)
+                .ToListAsync();
+            return tasks;
+        }
+
+        public async Task<List<Models.Task>> GetTasksLimit(int value)
+        {
+            var tasks = await _db.Tasks.OrderBy(t => t.Name)
+                .Take(value)
                 .ToListAsync();
             return tasks;
         }
@@ -50,6 +59,34 @@ namespace TasksApi.Services
         {
             _db.Tasks.Update(task);
             await _db.SaveChangesAsync();
+        }
+
+        public async System.Threading.Tasks.Task UploadFile(IFormFile file, int taskId)
+        {
+            var uploadResult = new UploadResult
+            {
+                FileName = file.FileName,
+                StoredFileName = $"./upload/{file.FileName}",
+                TaskId = taskId
+            };
+            _db.UploadResults.Add(uploadResult);
+            FileCreate(uploadResult.StoredFileName, file);
+            await _db.SaveChangesAsync();
+        }
+
+        private void FileCreate(string path, IFormFile file)
+        {
+            try
+            {
+                using (var fstream = new FileInfo(path).Create())
+                {
+                   file.CopyTo(fstream);
+                }
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }
