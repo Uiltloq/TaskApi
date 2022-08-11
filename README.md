@@ -8,14 +8,14 @@
 5. API должен иметь тестовый интерфейс в браузере (swagger или аналогичный). БД должна содержать тестовые данные.  Рекомендуется использовать .NET 5.0 или выше, БД MSSQL и какую-то ORM.
 
 API:
-GET: /api/task/ - Выводит список всех задач;
-POST: /api/task - Создает новую задачу;
-GET: /api/task/id - Выводит задачу по id;
-PUT: /api/task/id - Изменяет задачу по id;
-DELETE: /api/task/id - Удаляет задачу по id;
-GET: /api/task/value - Выводит предел задач;
-POST: /api/task/uploadfile - Загружает файл, к определенной задаче;
+* GET: /api/task/ - Выводит список всех задач;
+* POST: /api/task - Создает новую задачу;
+* GET: /api/task/id - Выводит задачу по id;
+* PUT: /api/task/id - Изменяет задачу по id;
+* DELETE: /api/task/id - Удаляет задачу по id;
+* GET: /api/task/value - Выводит предел задач;
+* POST: /api/task/uploadfile - Загружает файл, к определенной задаче;
 
-GET: /api/file/id - Выводит файл по id;
-DELETE: /api/file/id - Удалаяет файл по id;
-GET: /api/file - Выводит список файлов;
+* GET: /api/file/id - Выводит файл по id;
+* DELETE: /api/file/id - Удалаяет файл по id;
+* GET: /api/file - Выводит список файлов;
